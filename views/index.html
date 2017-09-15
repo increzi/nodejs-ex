@@ -1,8 +1,13 @@
 <!doctype html>
 <html lang="en">
+<body>
 <p>Page view count:
-    <% if (pageCountMessage) { %>
-       <span class="code" id="count-value"><%=pageCountMessage%></span>
-       </p>
-
+<% if (pageCountMessage) { %>
+   <span class="code" id="count-value"><%=pageCountMessage%></span>
+   </p>
+<% } else { %>
+   <span class="code" id="count-value">No database configured</span>
+   </p>
+<%} %>
+</body>
 </html>
