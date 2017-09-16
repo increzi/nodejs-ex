@@ -1,17 +1,16 @@
 //  OpenShift sample Node application
-//var express = require('express'),
-    //app     = express(),
+var express = require('express'),
+    app     = express(),
     //morgan  = require('morgan');
 
-var app = require('http').createServer(handler);
-var io = require('socket.io')(app);
-//var fs = require('fs');
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
     
 Object.assign=require('object-assign')
 
-//app.engine('html', require('ejs').renderFile);
-//app.use(morgan('combined'))
+app.engine('html', require('ejs').renderFile);
+app.use(morgan('combined'))
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -61,7 +60,7 @@ var initDb = function(callback) {
   });
 };
 
-/*app.get('/', function (req, res) {
+app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
   if (!db) {
@@ -77,7 +76,7 @@ var initDb = function(callback) {
   } else {
     res.render('index.html', { pageCountMessage : null});
   }
-});*/
+});
 
 /*app.get('/pagecount', function (req, res) {
   // try to initialize the db on every request if it's not already
@@ -111,19 +110,9 @@ module.exports = app ;*/
 
 app.listen(port);
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-
-    res.writeHead(200);
-    res.end(data);
-  });
-}
-
 io.on('connection', function (socket) {
-    console.log("it worked");
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
 });
