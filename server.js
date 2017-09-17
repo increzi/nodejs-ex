@@ -105,14 +105,9 @@ initDb(function(err){
 
 io.on('connect', function (socket) {
     console.log('a user connected');
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function (data) {
-        console.log(data);
+    socket.on('chat message', function(msg){
+        console.log('message: ' + msg);
     });
-});
-
-io.on('my other event', function (socket) {
-    socket.emit('final', {test: '1', test2: '2'})
 });
 
 server.listen(port);
