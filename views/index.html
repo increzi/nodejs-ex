@@ -30,8 +30,8 @@
       $('#m').val('');
       return false;
     });
-    socket.on('chat message', function(msg, num){
-      $('#messages').append($('<li id=' + num + '>' + msg + '</li'));
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li id=' + msg.id + '>' + msg.text + '</li'));
     });
   });
 </script>
