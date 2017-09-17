@@ -76,7 +76,8 @@ app.get('/', function (req, res) {
     col.find().sort({time: -1}).toArray(function(err, cursor){
         if (err) throw err;
         for (i = 0; i < RESULTS_TO_SHOW; i++) {
-            io.emit('init', {text:cursor[i].msg, result:cursor[i].result, id:cursor[i].time})
+            console.log(cursor[i])
+            io.emit('init', {text:cursor[i].text, result:cursor[i].result, id:cursor[i].time})
         }
     });
   } else {
@@ -120,7 +121,7 @@ io.on('connection', function(socket){
     if (db) {
         console.log("sorting");
         var col = db.collection('calcs');
-        col.insert({text: msg, result: null, time: Date.now()});
+        col.insert({text: msg, result: 1, time: Date.now()});
         col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
             console.log(cursor);
