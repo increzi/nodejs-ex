@@ -70,20 +70,19 @@ app.get('/', function (req, res) {
   if (db) {
     // Create a document with request IP and current time of request
     db.collection('counts').insert({ip: req.ip, date: Date.now()});
-    res.sendFile(__dirname + '/views/index.html');
-
-    var col = db.collection('calcs');
-    col.find().sort({time: -1}).toArray(function(err, cursor){
-        if (err) throw err;
-        for (i = 0; i < RESULTS_TO_SHOW; i++) {
-            console.log(cursor[i])
-            io.emit('init', {text:cursor[i].text, result:cursor[i].result, id:cursor[i].time})
-        }
-    });
-  } else {
-    res.sendFile(__dirname + '/views/index.html');
-    //res.render('index.html', { pageCountMessage : null});
+    console.log("collected ip");
   }
+
+  res.sendFile(__dirname + '/views/index.html');
+  console.log("display 10");
+  var col = db.collection('calcs');
+  col.find().sort({time: -1}).toArray(function(err, cursor){
+    if (err) throw err;
+    for (i = 0; i < RESULTS_TO_SHOW; i++) {
+        console.log(cursor[i])
+        io.emit('init', {text:cursor[i].text, result:cursor[i].result, id:cursor[i].time})
+    }
+  });
 });
 
 app.get('/pagecount', function (req, res) {
@@ -113,7 +112,6 @@ initDb(function(err){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    io.emit('chat message', {text:msg, id:1});
     console.log("emitted");
     if (!db) {
         initDb(function(err){});
