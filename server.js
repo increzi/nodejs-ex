@@ -116,6 +116,8 @@ io.on('connection', function(socket){
         console.log("inserted");
 
         //io.emit('chat message', {text:msg, result: res, id: t});
+        console.log("emptyed");
+        io.emit('empty', {}});
 
         console.log("display 10");
           var col = db.collection('calcs');
@@ -127,8 +129,8 @@ io.on('connection', function(socket){
             }
         });
         console.log("emitted");
-        io.emit('empty', null);
-        console.log("emptyed");
+        
+
     }
   });
 });

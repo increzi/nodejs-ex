@@ -36,9 +36,9 @@
     socket.on('chat message', function(msg){
       $('#messages').append($('<li id=' + msg.id + '>' + msg.text + ' = ' + msg.result + '</li>'));
     });
-    socket.on('empty', function(msg)){
+    socket.on('empty', function(msg){
        $("#messages").empty();
-    }
+    });
   });
 </script>
 </body>
