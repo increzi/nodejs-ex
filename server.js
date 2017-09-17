@@ -115,9 +115,5 @@ io.on('my other event', function (socket) {
     socket.emit('final', {test: '1', test2: '2'})
 });
 
-http.listen(port, function(){
-  console.log('listening on *:3000');
-});
-
 server.listen(port);
 console.log('Server running on http://%s:%s', ip, port);
