@@ -31,10 +31,10 @@
       return false;
     });
     socket.on('init', function(msg){
-      $('#messages').append($('<li id=' + msg.id + '>' + msg.text + " = " msg.result + '</li>'));
+      $('#messages').append($('<li id=' + msg.id + '>' + msg.text + ' = ' + msg.result + '</li>'));
     });
     socket.on('chat message', function(msg){
-      $('#messages').append($('<li id=' + msg.id + '>' + msg.text + " = " msg.result + '</li>'));
+      $('#messages').append($('<li id=' + msg.id + '>' + msg.text + ' = ' + msg.result + '</li>'));
     });
   });
 </script>
