@@ -104,7 +104,7 @@ initDb(function(err){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    io.emit('chat message', "hehe");
+    io.emit('chat message', "hehe", "1");
   });
 });
 
