@@ -75,20 +75,7 @@ app.get('/', function (req, res) {
 
   res.sendFile(__dirname + '/views/index.html');
 
-  if (!db) {
-        initDb(function(err){});
-    }
-    if (db) {
-        console.log("display 10");
-          var col = db.collection('calcs');
-          col.find().sort({time: -1}).toArray(function(err, cursor){
-            if (err) throw err;
-            for (i = 0; i < RESULTS_TO_SHOW; i++) {
-                console.log(i)
-                io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
-            }
-        });
-    }
+
 });
 
 app.get('/pagecount', function (req, res) {
@@ -117,7 +104,6 @@ initDb(function(err){
 });
 
 io.on('connection', function(socket){
-    
   socket.on('chat message', function(msg){
     if (!db) {
         initDb(function(err){});
@@ -127,13 +113,22 @@ io.on('connection', function(socket){
         var t = Date.now();
         var res = 1;
         col.insert({text: msg, result: res, time: t});
-        io.emit('chat message', {text:msg, result: res, id: t});
-        console.log("emitted");
-        col.find().sort({time: -1}).toArray(function(err, cursor){
+        console.log("inserted");
+
+        //io.emit('chat message', {text:msg, result: res, id: t});
+
+        console.log("display 10");
+          var col = db.collection('calcs');
+          col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
-            //console.log(cursor);
-            console.log("sorted");
+            for (i = 0; i < RESULTS_TO_SHOW; i++) {
+                console.log(i)
+                io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
+            }
         });
+        console.log("emitted");
+        io.emit('empty', null);
+        console.log("emptyed");
     }
   });
 });
