@@ -5,6 +5,8 @@ var express = require('express'),
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+var RESULTS_TO_SHOW = 10;
+
 Object.assign=require('object-assign')
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
@@ -66,12 +68,16 @@ app.get('/', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var col = db.collection('counts');
     // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-      res.sendFile(__dirname + '/views/index.html');
-      //res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
+    db.collection('counts').insert({ip: req.ip, date: Date.now()});
+    res.sendFile(__dirname + '/views/index.html');
+
+    var col = db.collection('calcs');
+    col.find().sort({time: -1}).toArray(function(err, cursor){
+        if (err) throw err;
+        for (i = 0; i < RESULTS_TO_SHOW; i++) {
+            io.emit('chat message', {text:cursor[i].msg, result:cursor[i].result id:cursor[i].time})
+        }
     });
   } else {
     res.sendFile(__dirname + '/views/index.html');
@@ -114,7 +120,7 @@ io.on('connection', function(socket){
     if (db) {
         console.log("sorting");
         var col = db.collection('calcs');
-        col.insert({text: msg, time: Date.now()});
+        col.insert({text: msg, result: null, time: Date.now()});
         col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
             console.log(cursor);
