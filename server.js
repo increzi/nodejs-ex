@@ -50,6 +50,10 @@ var initDb = function(callback) {
     dbDetails.databaseName = db.databaseName;
     dbDetails.url = mongoURLLabel;
     dbDetails.type = 'MongoDB';
+    db.createCollection("calcs", function(err, res) {
+        if (err) throw err;
+            console.log("Collection created!");
+    });
 
     console.log('Connected to MongoDB at: %s', mongoURL);
   });
@@ -100,11 +104,15 @@ initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
 });
 
-//app.listen(port);
-
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', {text:"hehe", id:1});
+    if (!db) {
+        initDb(function(err){});
+    }
+    if (db) {
+        var col = db.collection('calcs');
+    }
   });
 });
 
