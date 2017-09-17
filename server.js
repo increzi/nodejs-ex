@@ -102,22 +102,20 @@ initDb(function(err){
 });
 
 io.on('connection', function(socket){
-    socket.on('connection', function(msg){
-        if (!db) {
-            initDb(function(err){});
-        }
-        if (db) {
-            console.log("display 10");
-              var col = db.collection('calcs');
-              col.find().sort({time: -1}).toArray(function(err, cursor){
-                if (err) throw err;
-                for (i = 0; i < RESULTS_TO_SHOW; i++) {
-                    console.log(i)
-                    io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
-                }
-            });
-        }
-    });
+    if (!db) {
+        initDb(function(err){});
+    }
+    if (db) {
+        console.log("display 10");
+          var col = db.collection('calcs');
+          col.find().sort({time: -1}).toArray(function(err, cursor){
+            if (err) throw err;
+            for (i = 0; i < RESULTS_TO_SHOW; i++) {
+                console.log(i)
+                io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
+            }
+        });
+    }
   socket.on('chat message', function(msg){
     if (!db) {
         initDb(function(err){});
