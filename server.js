@@ -60,7 +60,7 @@ var initDb = function(callback) {
   });
 };
 
-app.listen(port, ip);
+server.listen(port);
 console.log('Server running on http://%s:%s', ip, port);
 
 app.get('/', function (req, res) {
