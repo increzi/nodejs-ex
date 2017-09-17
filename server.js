@@ -79,8 +79,8 @@ app.get('/', function (req, res) {
   col.find().sort({time: -1}).toArray(function(err, cursor){
     if (err) throw err;
     for (i = 0; i < RESULTS_TO_SHOW; i++) {
-        console.log(cursor[i])
-        io.emit('init', {text:cursor[i].text, result:cursor[i].result, id:cursor[i].time})
+        console.log(i)
+        io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
     }
   });
 });
@@ -112,20 +112,20 @@ initDb(function(err){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    console.log("emitted");
     if (!db) {
         initDb(function(err){});
     }
     if (db) {
-        console.log("sorting");
         var col = db.collection('calcs');
         var t = Date.now();
         var res = 1;
         col.insert({text: msg, result: res, time: t});
         io.emit('chat message', {text:msg, result: res, id: t});
+        console.log("emitted");
         col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
-            console.log(cursor);
+            //console.log(cursor);
+            console.log("sorted");
         });
     }
   });
