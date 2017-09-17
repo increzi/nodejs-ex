@@ -110,6 +110,8 @@ console.log('Server running on http://%s:%s', ip, port);
 
 io.on('connection', function (socket) {
     socket.emit('news', { hello: 'world' });
+    console.log(port);
+    console.log(ip);
     socket.on('my other event', function (data) {
         console.log(data);
     });
