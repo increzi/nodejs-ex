@@ -74,15 +74,6 @@ app.get('/', function (req, res) {
   }
 
   res.sendFile(__dirname + '/views/index.html');
-  console.log("display 10");
-  var col = db.collection('calcs');
-  col.find().sort({time: -1}).toArray(function(err, cursor){
-    if (err) throw err;
-    for (i = 0; i < RESULTS_TO_SHOW; i++) {
-        console.log(i)
-        io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
-    }
-  });
 });
 
 app.get('/pagecount', function (req, res) {
@@ -111,6 +102,22 @@ initDb(function(err){
 });
 
 io.on('connection', function(socket){
+    socket.on('connection', function(msg){
+        if (!db) {
+            initDb(function(err){});
+        }
+        if (db) {
+            console.log("display 10");
+              var col = db.collection('calcs');
+              col.find().sort({time: -1}).toArray(function(err, cursor){
+                if (err) throw err;
+                for (i = 0; i < RESULTS_TO_SHOW; i++) {
+                    console.log(i)
+                    io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
+                }
+            });
+        }
+    });
   socket.on('chat message', function(msg){
     if (!db) {
         initDb(function(err){});
