@@ -60,9 +60,6 @@ var initDb = function(callback) {
   });
 };
 
-server.listen(port);
-console.log('Server running on http://%s:%s', ip, port);
-
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -108,12 +105,15 @@ initDb(function(err){
 
 //app.listen(port);
 
-io.on('connection', function (socket) {
+io.on('connect', function (socket) {
     console.log("sent from server")
     socket.emit('news', { hello: 'world' });
     socket.on('my other event', function (data) {
         console.log(data);
     });
 });
+
+server.listen(port);
+console.log('Server running on http://%s:%s', ip, port);
 
 module.exports = app ;
