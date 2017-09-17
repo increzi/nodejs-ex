@@ -76,7 +76,7 @@ app.get('/', function (req, res) {
     col.find().sort({time: -1}).toArray(function(err, cursor){
         if (err) throw err;
         for (i = 0; i < RESULTS_TO_SHOW; i++) {
-            io.emit('chat message', {text:cursor[i].msg, result:cursor[i].result id:cursor[i].time})
+            io.emit('init', {text:cursor[i].msg, result:cursor[i].result id:cursor[i].time})
         }
     });
   } else {
