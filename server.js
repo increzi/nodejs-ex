@@ -78,7 +78,7 @@ app.get('/', function (req, res) {
   }
 });
 
-/*app.get('/pagecount', function (req, res) {
+app.get('/pagecount', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
   if (!db) {
@@ -91,24 +91,22 @@ app.get('/', function (req, res) {
   } else {
     res.send('{ pageCount: -1 }');
   }
-});*/
+});
 
 // error handling
-/*app.use(function(err, req, res, next){
+app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something bad happened!');
-});*/
+});
 
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
 });
 
-/*app.listen(port, ip);
+app.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
 
-module.exports = app ;*/
-
-app.listen(port);
+//app.listen(port);
 
 io.on('connection', function (socket) {
     socket.emit('news', { hello: 'world' });
@@ -116,3 +114,5 @@ io.on('connection', function (socket) {
         console.log(data);
     });
 });
+
+module.exports = app ;
