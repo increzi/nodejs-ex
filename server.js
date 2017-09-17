@@ -6,11 +6,7 @@ var express = require('express'),
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-
 Object.assign=require('object-assign')
-
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -108,7 +104,7 @@ initDb(function(err){
 //app.listen(port);
 
 io.on('connect', function (socket) {
-    console.log("sent from server")
+    console.log('a user connected');
     socket.emit('news', { hello: 'world' });
     socket.on('my other event', function (data) {
         console.log(data);
@@ -119,7 +115,9 @@ io.on('my other event', function (socket) {
     socket.emit('final', {test: '1', test2: '2'})
 });
 
+http.listen(port, function(){
+  console.log('listening on *:3000');
+});
+
 server.listen(port);
 console.log('Server running on http://%s:%s', ip, port);
-
-module.exports = app ;
