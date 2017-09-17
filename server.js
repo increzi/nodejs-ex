@@ -115,7 +115,7 @@ io.on('connection', function(socket){
         console.log("sorting");
         var col = db.collection('calcs');
         col.insert({text: msg, time: Date.now()});
-        col.find().sort({time: -1}, function(err, cursor){
+        col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
             console.log(cursor);
         });
