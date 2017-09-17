@@ -113,7 +113,7 @@ initDb(function(err){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    io.emit('chat message', {text:"hehe", id:1});
+    io.emit('chat message', {text:msg, id:1});
     console.log("emitted");
     if (!db) {
         initDb(function(err){});
@@ -121,7 +121,10 @@ io.on('connection', function(socket){
     if (db) {
         console.log("sorting");
         var col = db.collection('calcs');
-        col.insert({text: msg, result: 1, time: Date.now()});
+        var t = Date.now();
+        var res = 1;
+        col.insert({text: msg, result: res, time: t});
+        io.emit('chat message', {text:msg, result: res, id: t});
         col.find().sort({time: -1}).toArray(function(err, cursor){
             if (err) throw err;
             console.log(cursor);
