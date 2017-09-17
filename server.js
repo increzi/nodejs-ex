@@ -71,11 +71,11 @@ app.get('/', function (req, res) {
     // Create a document with request IP and current time of request
     col.insert({ip: req.ip, date: Date.now()});
     col.count(function(err, count){
-      res.sendFile(__dirname + '/index.html');
+      res.sendFile(__dirname + '/views/index.html');
       //res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
     });
   } else {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/views/index.html');
     //res.render('index.html', { pageCountMessage : null});
   }
 });
