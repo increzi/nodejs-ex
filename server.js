@@ -6,7 +6,7 @@ var express = require('express'),
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-    
+
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
@@ -60,6 +60,9 @@ var initDb = function(callback) {
   });
 };
 
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
+
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -102,9 +105,6 @@ app.use(function(err, req, res, next){
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
 });
-
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
 
 //app.listen(port);
 
