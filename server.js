@@ -107,15 +107,17 @@ initDb(function(err){
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', {text:"hehe", id:1});
+    console.log("emitted");
     if (!db) {
         initDb(function(err){});
     }
     if (db) {
+        console.log("sorting");
         var col = db.collection('calcs');
         col.insert({text: msg, time: Date.now()});
         col.find().sort({time: -1}, function(err, cursor){
             if (err) throw err;
-            console.log(result)
+            console.log(cursor);
         });
     }
   });
