@@ -111,7 +111,12 @@ io.on('connection', function(socket){
     if (db) {
         var col = db.collection('calcs');
         var t = Date.now();
-        var res = 1;
+        var res;
+        try {
+            res = math.eval(msg);
+        } catch(err) {
+            res = NaN;
+        }
         col.insert({text: msg, result: res, time: t});
         console.log("inserted");
 
@@ -125,12 +130,10 @@ io.on('connection', function(socket){
             if (err) throw err;
             for (i = 0; i < RESULTS_TO_SHOW; i++) {
                 console.log(i)
-                io.emit('init', {text:cursor[i].text, result:i, id:cursor[i].time})
+                io.emit('init', {text:cursor[i].text, result:cursor[i].result, id:cursor[i].time})
             }
         });
         console.log("emitted");
-        
-
     }
   });
 });
