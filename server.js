@@ -4,6 +4,7 @@ var express = require('express'),
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var math = require('mathjs');
 
 var RESULTS_TO_SHOW = 10;
 
@@ -116,6 +117,7 @@ io.on('connection', function(socket){
             res = math.eval(msg);
         } catch(err) {
             res = NaN;
+            console.log(err);
         }
         col.insert({text: msg, result: res, time: t});
         console.log("inserted");
