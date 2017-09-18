@@ -105,6 +105,9 @@ initDb(function(err){
 });
 
 io.on('connection', function(socket){
+    socket.on('connection', function(msg){
+        console.log("socket connected");
+    });
   socket.on('chat message', function(msg){
     if (!db) {
         initDb(function(err){});
